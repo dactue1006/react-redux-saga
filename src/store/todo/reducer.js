@@ -43,7 +43,6 @@ export default (state = initialState, action) => {
       }
 
     case EDIT_TASK:
-      console.log(action);
       return {
         ...state,
         todos: state.todos.map(

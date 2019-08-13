@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { addNewTask } from "store/todo/action";
+import { postTodosRequest } from "store/demo/action";
 
 class Task extends Component {
   constructor(props) {
@@ -19,6 +20,7 @@ class Task extends Component {
 
   handleClick = () => {
     if (this.state.value) {
+      this.props.postTodosRequest({description: this.state.value})
       this.props.addNewTask(this.state.value);
       this.setState({
         value: ""
@@ -50,6 +52,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addNewTask: (description) => {
       dispatch(addNewTask(description)) 
+    },
+    postTodosRequest: (data) => {
+      dispatch(postTodosRequest(data))
     }
   }
 }

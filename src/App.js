@@ -5,6 +5,7 @@ import 'mdbreact/dist/css/mdb.css';
 import FilterTask from "./components/FilterTask";
 import NewTask from "./components/NewTask";
 import VisibilityFilterList from "./components/VisibilityFilterList";
+import Dog from "./components/Dog";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <FilterTask />
       <NewTask />
       <VisibilityFilterList />
+      <Dog />
     </div>
   );
 }

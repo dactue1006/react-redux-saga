@@ -11,17 +11,7 @@ class Task extends Component {
       data: null
     }
   }
-
-  componentDidMount() {
-    fetch('https://jsonplaceholder.typicode.com/posts/1')
-      .then(response => response.json())
-      .then(json => {
-        console.log(json)
-        this.setState({
-          data: json
-        })
-      })
-  }
+  
   handleEditClick = () => {
     this.props.editTask(this.props.task.id);
   }
