@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { addNewTask } from "store/todo/action";
-import { postTodosRequest } from "store/demo/action";
+import { createTodoRequest } from "store/demo/action";
 
 class Task extends Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class Task extends Component {
 
   handleClick = () => {
     if (this.state.value) {
-      this.props.postTodosRequest({description: this.state.value})
+      this.props.createTodoRequest({ description: this.state.value, completed: false})
       this.props.addNewTask(this.state.value);
       this.setState({
         value: ""
@@ -35,11 +35,11 @@ class Task extends Component {
     console.log(this.props)
     return (
       <div className="d-flex align-items-center">
-        <input 
-          type="text" 
-          id="exampleForm2" 
-          className="form-control" 
-          onChange={this.handleChange} 
+        <input
+          type="text"
+          id="exampleForm2"
+          className="form-control"
+          onChange={this.handleChange}
           ref={this.myRef}
         />
         <button className="btn btn-primary btn-md" onClick={this.handleClick}><i className="fa fa-plus"></i></button>
@@ -51,10 +51,10 @@ class Task extends Component {
 const mapDispatchToProps = (dispatch) => {
   return {
     addNewTask: (description) => {
-      dispatch(addNewTask(description)) 
+      dispatch(addNewTask(description))
     },
-    postTodosRequest: (data) => {
-      dispatch(postTodosRequest(data))
+    createTodoRequest: (data) => {
+      dispatch(createTodoRequest(data))
     }
   }
 }

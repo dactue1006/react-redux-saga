@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { deleteTask, editTask, saveEditTask, toggleTask } from "store/todo/action";
+import { deleteTodoRequest, editTask, editTodoRequest } from "store/demo/action";
 
 class Task extends Component {
   constructor(props) {
@@ -11,7 +11,7 @@ class Task extends Component {
       data: null
     }
   }
-  
+
   handleEditClick = () => {
     this.props.editTask(this.props.task.id);
   }
@@ -19,11 +19,11 @@ class Task extends Component {
   handleSaveClick = () => {
     const newDescription = this.editRef.current.value;
     const id = this.props.task.id;
-    this.props.saveEditTask(id, newDescription);
+    this.props.editTodoRequest(id, { ...this.props.task, description: newDescription })
   }
 
   handleDeleteClick = () => {
-    this.props.deleteTask(this.props.task.id);
+    this.props.deleteTodoRequest(this.props.task.id);
   }
 
   handleChangeEdit = (event) => {
@@ -31,19 +31,19 @@ class Task extends Component {
   }
 
   toggleTask = (event) => {
-    this.props.toggleTask(this.props.task.id);
-    console.log(event.target.checked);
+    const { task } = this.props;
+    this.props.editTodoRequest(task.id, { ...task, completed: !task.completed})
   }
+
   render() {
     const { task } = this.props;
-
     return (
       <div className={`d-flex align-items-center`}>
-        <input className="m-2" type="checkbox" onChange={this.toggleTask} checked={task.isComplete} />
-        {!task.isEditting
+        <input className="m-2" type="checkbox" onChange={this.toggleTask} checked={task.completed} />
+        {task.isEditting !== true
           ?
           <React.Fragment>
-            <div className={`flex-grow-1  ${task.isComplete ? "line-through" : ""}`}>{this.props.task.description}</div>
+            <div className={`flex-grow-1  ${task.completed ? "line-through" : ""}`}>{this.props.task.description}</div>
             <button className="btn btn-warning btn-sm" onClick={this.handleEditClick}><i className="fa fa-pen"></i></button>
           </React.Fragment>
           :
@@ -58,4 +58,9 @@ class Task extends Component {
   }
 }
 
-export default connect(null, { deleteTask, editTask, saveEditTask, toggleTask })(Task);
+export default connect(null,
+  {
+    editTask,
+    deleteTodoRequest,
+    editTodoRequest
+  })(Task);

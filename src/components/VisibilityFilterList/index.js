@@ -1,13 +1,13 @@
 import { connect } from "react-redux";
 import { SHOW_ALL, SHOW_ACTIVE, SHOW_COMPLETE } from "store/filter/action";
-import ListTask from "../ListTask";
+import Demo from "../Demo";
 
 const getVisibilityFilter = (todos, filter) => {
   switch (filter) {
     case SHOW_ACTIVE:
-      return todos.filter(task => !task.isComplete);
+      return todos.filter(task => !task.completed);
     case SHOW_COMPLETE:
-      return todos.filter(task => task.isComplete);
+      return todos.filter(task => task.completed);
     case SHOW_ALL:
       return todos;
     default:
@@ -16,7 +16,7 @@ const getVisibilityFilter = (todos, filter) => {
 }
 
 const mapStateToProps = (state) => ({
-  todos: getVisibilityFilter(state.todo.todos, state.visibilityFilter)
+  todos: getVisibilityFilter(state.demo.todos, state.visibilityFilter)
 })
 
-export default connect(mapStateToProps)(ListTask);
+export default connect(mapStateToProps)(Demo);

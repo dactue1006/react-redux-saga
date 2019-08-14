@@ -7,8 +7,9 @@ class App extends Component {
   componentDidMount() {
     this.props.getTodosRequest();
   }
+  
   renderListTask = () => {
-    const { todos } = this.props.demo;
+    const { todos } = this.props;
     return (
       todos.map((task, index) => {
         return <Task key={index} task={task} />
@@ -25,7 +26,6 @@ class App extends Component {
     }
     return (
       <div className="App">
-        Task ne
         {this.renderListTask()}
       </div>
     );

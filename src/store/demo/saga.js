@@ -1,21 +1,24 @@
-import { takeLatest, take, call, put } from "redux-saga/effects";
+import { takeLatest, call, put } from "redux-saga/effects";
 import { 
   GET_TODOS_REQUEST,
+  CREATE_TODO_REQUEST,
+  DELETE_TODO_REQUEST,
   getTodosSuccess,
   getTodosFailure,
-  postTodosSuccess,
-  postTodosFailure,
-  POST_TODOS_REQUEST
+  createTodoSuccess,
+  createTodoFailure,
+  deleteTodoSuccess,
+  deleteTodoFailure,
+  EDIT_TODO_REQUEST,
+  editTodoSuccess,
+  editTodoFailure
 } from "./action";
 
 import axios from "axios";
 
-function* watcherSaga() {
-  yield takeLatest(GET_TODOS_REQUEST, workerSaga);
-}
-
-function* watcherSaga2() {
-  yield takeLatest(POST_TODOS_REQUEST, workerSaga2);
+// get todos
+function* watchGetTodos() {
+  yield takeLatest(GET_TODOS_REQUEST, workGetTodos);
 }
 
 function fetchTodos() {
@@ -25,19 +28,9 @@ function fetchTodos() {
   })
 }
 
-function postTodos(data) {
-  console.log("data", data.payload.data)
-  return axios({
-    method: "POST",
-    url: "http://localhost:8080/todos",
-    data: data.payload.data
-  })
-}
-
-function* workerSaga() {
+function* workGetTodos() {
   try {
     const response = yield call(fetchTodos);
-    console.log(response);
     const data = response.data;
     yield put(getTodosSuccess(data))
   } catch (error) {
@@ -45,15 +38,69 @@ function* workerSaga() {
   }
 }
 
-function* workerSaga2(data) {
+// create new todo
+function* watchCreateTodo() {
+  yield takeLatest(CREATE_TODO_REQUEST, workCreateTodo);
+}
+
+function createTodo(action) {
+  return axios({
+    method: "POST",
+    url: "http://localhost:8080/todos",
+    data: action.payload.todo
+  })
+}
+
+function* workCreateTodo(action) {
   try {
-    yield call(postTodos, data);
-    const response = yield call(fetchTodos);
-    console.log(response);
-    yield put(postTodosSuccess(response.data))
+    const response = yield call(createTodo, action);
+    yield put(createTodoSuccess(response.data));
   } catch (error) {
-    yield put(postTodosFailure(error));
+    yield put(createTodoFailure(error));
   }
 }
 
-export default [watcherSaga(), watcherSaga2()];
+// delete todo
+function* watchDeleteTodo() {
+  yield takeLatest(DELETE_TODO_REQUEST, workDeleteTodo);
+}
+
+function deleteTodo(action) {
+  return axios({
+    method: "DELETE",
+    url: `http://localhost:8080/todos/${action.payload.id}`
+  })
+}
+
+function* workDeleteTodo(action) {
+  try {
+    yield call(deleteTodo, action);
+    yield put(deleteTodoSuccess(action.payload.id));
+  } catch (error) {
+    yield put(deleteTodoFailure(error));
+  }
+}
+
+// edit todo
+function* watchEditTodo() {
+  yield takeLatest(EDIT_TODO_REQUEST, workEditTodo);
+}
+
+function editTodo(action) {
+  return axios({
+    method: "PUT",
+    url: `http://localhost:8080/todos/${action.payload.id}`,
+    data: action.payload.todo
+  })
+}
+ 
+function* workEditTodo(action) {
+  try {
+    const response = yield call(editTodo, action);
+    yield put(editTodoSuccess(response.data));
+  } catch (error) {
+    yield put(editTodoFailure(error));
+  }
+}
+
+export default [watchGetTodos(), watchCreateTodo(), watchDeleteTodo(), watchEditTodo()];
