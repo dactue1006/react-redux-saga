@@ -24,7 +24,7 @@ function* watchGetTodos() {
 function fetchTodos() {
   return axios({
     method: "GET",
-    url: "http://localhost:8080/todos"
+    url: "http://localhost:8080/api/todos"
   })
 }
 
@@ -46,7 +46,7 @@ function* watchCreateTodo() {
 function createTodo(action) {
   return axios({
     method: "POST",
-    url: "http://localhost:8080/todos",
+    url: "http://localhost:8080/api/todos",
     data: action.payload.todo
   })
 }
@@ -68,7 +68,7 @@ function* watchDeleteTodo() {
 function deleteTodo(action) {
   return axios({
     method: "DELETE",
-    url: `http://localhost:8080/todos/${action.payload.id}`
+    url: `http://localhost:8080/api/todos/${action.payload.id}`
   })
 }
 
@@ -89,7 +89,7 @@ function* watchEditTodo() {
 function editTodo(action) {
   return axios({
     method: "PUT",
-    url: `http://localhost:8080/todos/${action.payload.id}`,
+    url: `http://localhost:8080/api/todos/${action.payload.id}`,
     data: action.payload.todo
   })
 }
@@ -97,6 +97,7 @@ function editTodo(action) {
 function* workEditTodo(action) {
   try {
     const response = yield call(editTodo, action);
+    console.log(response)
     yield put(editTodoSuccess(response.data));
   } catch (error) {
     yield put(editTodoFailure(error));

@@ -57,7 +57,7 @@ export default (state = intialState, action) => {
       return {
         ...state,
         isLoading: false,
-        todos: state.todos.map(todo => todo.id === action.payload.todo.id ? action.payload.todo : todo)
+        todos: state.todos.map(todo => todo.id === action.payload.todo.id ? {...action.payload.todo, isEditting: false} : todo)
       }
 
     case EDIT_TASK: 
